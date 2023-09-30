@@ -1,5 +1,3 @@
-import equal from "fast-deep-equal";
-
 type Value = null | number | string | boolean | Record<string, any> | Value[];
 
 export function keepUnchangedValues(left: Value, right: Value): Value {
@@ -30,3 +28,26 @@ export function keepUnchangedValues(left: Value, right: Value): Value {
 
   return allEqual ? (left as object) : result;
 }
+
+function equal(left: any, right: any): boolean {
+  if (left === right) return true;
+  if (Array.isArray(left) && Array.isArray(right)) {
+    if (left.length !== right.length) return false;
+    for (let i = 0; i < left.length; i++) {
+      if (!equal(left[i], right[i])) return false;
+    }
+    return true;
+  }
+  if (typeof left === "object" && typeof right === "object") {
+    if (left === null || right === null) return false;
+    const keysLeft = Object.keys(left);
+    const keysRight = Object.keys(right);
+    if (keysLeft.length !== keysRight.length) return false;
+    for (const key of keysLeft) {
+      if (!keysRight.includes(key) || !equal(left[key], right[key])) return false;
+    }
+    return true;
+  }
+  return false;
+}
+

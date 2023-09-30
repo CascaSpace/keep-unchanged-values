@@ -50,6 +50,9 @@ const result = keepUnchangedValues(oldArray, newArray);
 // result[3] will be a reference to oldArray[1] since they are equal
 ```
 
+## Goals
+Made for [Casca Extension](https://casca.space/) to optimize the perfomance of updating the data in the store and reduce the number of re-renders.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
