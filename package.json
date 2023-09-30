@@ -1,0 +1,7 @@
+{
+  "name": "merge-prefer-left",
+  "version": "1.0.0",
+  "dependencies": {
+    "fast-deep-equal": "^3.1.3"
+  }
+}
