@@ -1,11 +1,12 @@
 import equal from "fast-deep-equal";
 
-type Value = null | number | string | boolean | object | Value[];
+type Value = null | number | string | boolean | Record<string, any> | Value[];
 
 export function keepUnchangedValues(left: Value, right: Value): Value {
   if (equal(left, right)) return left;
-  if (!left || typeof left !== typeof right || (typeof left !== 'object' && typeof right !== 'object')) return right;
-  if (Array.isArray(left) && Array.isArray(right)) {
+  if (!left || !right || typeof left !== typeof right || typeof left !== 'object' || typeof right !== 'object') return right;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    if (!Array.isArray(left) || !Array.isArray(right)) return right
     const result: Value[] = [];
     for (const item of right) {
       const foundItem = left.find(lItem => equal(lItem, item));
@@ -14,7 +15,7 @@ export function keepUnchangedValues(left: Value, right: Value): Value {
     return result;
   }
 
-  const result: Value = {...(right as object)};
+  const result = {...(right as Record<string, any>)};
   let allEqual = true;
 
   for (const key of Object.keys(left)) {
