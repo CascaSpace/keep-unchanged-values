@@ -1,28 +1,34 @@
-type Value = null | number | string | boolean | Record<string, any> | Value[];
-
-export function keepUnchangedValues(left: Value, right: Value): Value {
+export function keepUnchangedValues(left: any, right: any): any {
   if (equal(left, right)) return left;
-  if (!left || !right || typeof left !== typeof right || typeof left !== 'object' || typeof right !== 'object') return right;
+  if (
+    !left ||
+    !right ||
+    typeof left !== typeof right ||
+    typeof left !== "object" ||
+    typeof right !== "object"
+  )
+    return right;
   if (Array.isArray(left) || Array.isArray(right)) {
-    if (!Array.isArray(left) || !Array.isArray(right)) return right
-    const result: Value[] = [];
+    if (!Array.isArray(left) || !Array.isArray(right)) return right;
+    const result = [];
     for (const item of right) {
-      const foundItem = left.find(lItem => equal(lItem, item));
+      //todo: optimize this
+      const foundItem = left.find((lItem) => equal(lItem, item));
       result.push(foundItem !== undefined ? foundItem : item);
     }
     return result;
   }
 
-  const result = {...(right as Record<string, any>)};
+  const result = { ...(right as Record<string, any>) };
   let allEqual = true;
 
-  for (const key of Object.keys(left)) {
+  for (const key of Object.keys(right)) {
     if (!right.hasOwnProperty(key)) {
       allEqual = false;
       continue;
     }
     const res = keepUnchangedValues(left[key], right[key]);
-    if (!equal(res, left[key])) allEqual = false;
+    if (res !== left[key]) allEqual = false;
     result[key] = res;
   }
 
@@ -31,7 +37,7 @@ export function keepUnchangedValues(left: Value, right: Value): Value {
 
 function equal(left: any, right: any): boolean {
   if (left === right) return true;
-  if (Array.isArray(left) && Array.isArray(right)) {
+  if (Array.isArray(left) || Array.isArray(right)) {
     if (left.length !== right.length) return false;
     for (let i = 0; i < left.length; i++) {
       if (!equal(left[i], right[i])) return false;
@@ -44,10 +50,10 @@ function equal(left: any, right: any): boolean {
     const keysRight = Object.keys(right);
     if (keysLeft.length !== keysRight.length) return false;
     for (const key of keysLeft) {
-      if (!keysRight.includes(key) || !equal(left[key], right[key])) return false;
+      if (!keysRight.includes(key) || !equal(left[key], right[key]))
+        return false;
     }
     return true;
   }
   return false;
 }
-

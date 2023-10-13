@@ -51,6 +51,7 @@ const result = keepUnchangedValues(oldArray, newArray);
 ```
 
 ## Goals
+
 Made for [Casca Extension](https://casca.space/) to optimize the perfomance of updating the data in the store and reduce the number of re-renders.
 
 ## License
