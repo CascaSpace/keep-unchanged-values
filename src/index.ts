@@ -37,6 +37,7 @@ export function keepUnchangedValues(left: any, right: any): any {
 
 function equal(left: any, right: any): boolean {
   if (left === right) return true;
+  if (!left || !right) return left === right;
   if (Array.isArray(left) || Array.isArray(right)) {
     if (left.length !== right.length) return false;
     for (let i = 0; i < left.length; i++) {
@@ -45,7 +46,6 @@ function equal(left: any, right: any): boolean {
     return true;
   }
   if (typeof left === "object" && typeof right === "object") {
-    if (left === null || right === null) return false;
     const keysLeft = Object.keys(left);
     const keysRight = Object.keys(right);
     if (keysLeft.length !== keysRight.length) return false;
